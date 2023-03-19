@@ -8,7 +8,6 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="css/leaflet-search.css">
         <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
@@ -35,9 +34,6 @@
         <script src="js/labels.js"></script>
         <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
         <script src="js/leaflet-measure.js"></script>
-        <script src="js/proj4.js"></script>
-        <script src="js/proj4leaflet.js"></script>
-        <script src="js/leaflet-search.js"></script>
         <script src="data/POPULATION_DENSITY_2021_1.js"></script>
         <script src="data/Cities_2.js"></script>
         <script>
@@ -57,15 +53,9 @@
             }
             highlightLayer.openPopup();
         }
-        var crs = new L.Proj.CRS('EPSG:32629', '+proj=utm +zone=29 +datum=WGS84 +units=m +no_defs', {
-            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
-        });
         var map = L.map('map', {
-            crs: crs,
-            continuousWorld: false,
-            worldCopyJump: false, 
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[4.181773429598068,-12.978363461704776],[8.600037963348564,-5.741132826619249]]);
+        }).fitBounds([[4.4466294836058085,-13.061866398436297],[8.859199096914171,-5.83163185132862]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -115,16 +105,15 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">ID</th>\
+                        <th scope="row">ID_1</th>\
                         <td>' + (feature.properties['ID_1'] !== null ? autolinker.link(feature.properties['ID_1'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">COUNTY</th>\
+                        <th scope="row">NAME_1</th>\
                         <td>' + (feature.properties['NAME_1'] !== null ? autolinker.link(feature.properties['NAME_1'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">POP.</th>\
-                        <td>' + (feature.properties['Population'] !== null ? autolinker.link(feature.properties['Population'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2"><strong>POPULATION</strong><br />' + (feature.properties['Population'] !== null ? autolinker.link(feature.properties['Population'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">AREA</th>\
@@ -135,7 +124,7 @@
                         <td>' + (feature.properties['Number of'] !== null ? autolinker.link(feature.properties['Number of'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">CREATION DATE</th>\
+                        <th scope="row">DATE CREATED</th>\
                         <td>' + (feature.properties['Date Creat'] !== null ? autolinker.link(feature.properties['Date Creat'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
@@ -279,7 +268,7 @@
         function style_Cities_2_0() {
             return {
                 pane: 'pane_Cities_2',
-                radius: 3.999999999999997,
+                radius: 2.0000000000000004,
                 opacity: 1,
                 color: 'rgba(61,128,53,1.0)',
                 dashArray: '',
@@ -361,13 +350,6 @@
               addLabel(layer, i);
               i++;
         });
-        map.addControl(new L.Control.Search({
-            layer: layer_POPULATION_DENSITY_2021_1,
-            initial: false,
-            hideMarkerOnCollapse: true,
-            propertyName: 'NAME_1'}));
-        document.getElementsByClassName('search-button')[0].className +=
-         ' fa fa-binoculars';
         resetLabels([layer_POPULATION_DENSITY_2021_1,layer_Cities_2]);
         map.on("zoomend", function(){
             resetLabels([layer_POPULATION_DENSITY_2021_1,layer_Cities_2]);
